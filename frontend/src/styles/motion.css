@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Centralized Motion Design Tokens & Utilities
+   Configurable shared timing curves and motion variables
+   ========================================================================== */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+
+  --stagger-delay: 80ms;
+  --reveal-distance: 24px;
+  --hover-lift: 6px;
+  --parallax-strength: 12px;
+  --cursor-ring-scale: 1.6;
+}
+
+/* ==========================================================================
+   View Transitions API circular theme expansion styling
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 9999;
+}
+.dark::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* ==========================================================================
+   Animated Gradient Headline - Subtle Monochrome
+   ========================================================================== */
+@keyframes monochrome-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-text {
+  background-size: 200% auto;
+  animation: monochrome-gradient-shift 8s ease infinite;
+}
+
+/* ==========================================================================
+   Infinite Marquee Keyframe
+   ========================================================================== */
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ==========================================================================
+   Animated SVG Stroke Drawing Helpers
+   ========================================================================== */
+@keyframes dash-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ==========================================================================
+   Form Validation Shake
+   ========================================================================== */
+@keyframes shake-x {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake-x 0.35s var(--ease-out);
+}
+
+/* ==========================================================================
+   Link Underline Draw (Monochrome left-to-right)
+   ========================================================================== */
+.link-draw-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-draw-underline::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1.5px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--text);
+  transition: width var(--duration-base) var(--ease-out);
+}
+
+.link-draw-underline:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   Reduced Motion Overrides
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient-text,
+  .animate-marquee,
+  .animate-shake {
+    animation: none !important;
+  }
+
+  .animate-marquee {
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+
+  .link-draw-underline::after {
+    transition: none !important;
+  }
+}

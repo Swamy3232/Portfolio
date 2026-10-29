@@ -1,0 +1,140 @@
+/* ==========================================================================
+   CustomCursor.css — Desktop Spotlight Custom Cursor
+   - 8px accent dot following mouse instantly
+   - 190px soft radial spotlight with 0.15 lerp easing
+   - 240px spotlight expansion over links, buttons & interactive cards
+   - Click scale down, window leave/enter detection
+   - 350ms cubic-bezier(.2,.7,.2,1) transitions
+   - Desktop only via @media (hover: hover) and (pointer: fine)
+   ========================================================================== */
+
+:root {
+  --cursor-dot-color: var(--accent, #0a0a0a);
+  --cursor-spotlight-start: rgba(10, 10, 10, 0.15);
+  --cursor-spotlight-interactive: rgba(10, 10, 10, 0.22);
+}
+
+.dark, [data-theme="dark"] {
+  --cursor-dot-color: var(--accent, #fafafa);
+  --cursor-spotlight-start: rgba(250, 250, 250, 0.15);
+  --cursor-spotlight-interactive: rgba(250, 250, 250, 0.22);
+}
+
+/* Fallback: hide custom cursor on touch and non-desktop devices */
+.custom-cursor-root {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* Hide the system cursor ONLY after the first mousemove */
+  body.custom-cursor-active,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active input,
+  body.custom-cursor-active select,
+  body.custom-cursor-active textarea,
+  body.custom-cursor-active .cursor-pointer {
+    cursor: none !important;
+  }
+
+  .custom-cursor-root {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 99999;
+    user-select: none;
+  }
+
+  /* 1. Small 8px Accent Dot (follows mouse instantly) */
+  .custom-cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--cursor-dot-color);
+    pointer-events: none;
+    z-index: 100000;
+    will-change: transform, opacity;
+    opacity: 1;
+    transition: 
+      opacity 250ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 250ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .custom-cursor-dot.is-hidden {
+    opacity: 0 !important;
+    transform: scale(0) !important;
+  }
+
+  /* 2. Soft Spotlight Wrapper (smooth 0.15 lerp rAF movement) */
+  .custom-cursor-spotlight-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    will-change: transform;
+  }
+
+  /* Spotlight Visual Disc */
+  .custom-cursor-spotlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    overflow: hidden;
+    will-change: width, height, transform, opacity, background;
+    transition: 
+      width 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      height 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      background 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      opacity 350ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Default State: 190px soft spotlight with radial gradient (~15% opacity to transparent) */
+  .custom-cursor-spotlight.mode-default {
+    width: 190px;
+    height: 190px;
+    background: radial-gradient(circle, var(--cursor-spotlight-start) 0%, transparent 70%);
+    box-shadow: none;
+    border: none;
+  }
+
+  /* Interactive State (Links, Buttons, Clickable Cards): Grows smoothly to 240px */
+  .custom-cursor-spotlight.mode-interactive {
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, var(--cursor-spotlight-interactive) 0%, transparent 72%);
+    box-shadow: none;
+    border: none;
+  }
+
+  /* Held-down mouse button: scales down slightly */
+  .custom-cursor-spotlight.is-pressed {
+    transform: translate(-50%, -50%) scale(0.88);
+  }
+
+  /* Hidden when mouse leaves window or before first interaction */
+  .custom-cursor-spotlight.is-hidden {
+    opacity: 0 !important;
+  }
+}
+
+/* Reduced Motion Respect */
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor-dot,
+  .custom-cursor-spotlight,
+  .custom-cursor-spotlight-wrap {
+    transition: none !important;
+  }
+}

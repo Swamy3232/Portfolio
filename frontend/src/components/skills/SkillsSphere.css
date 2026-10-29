@@ -1,0 +1,731 @@
+/* ==========================================================================
+   SkillsSphere.css — Modern 3D Tech-Stack Orb
+   Glassmorphism pills, realistic glass orb shader, dynamic depth cues,
+   subtle wireframe with orbit rings, and hardware-accelerated 60/120fps rendering.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     Design Tokens (Default: Dark Surface with Violet #7c5cff -> Cyan #22d3ee)
+     ------------------------------------------------------------------------ */
+  --sphere-surface: #0a0c16;
+  --sphere-accent-violet: #7c5cff;
+  --sphere-accent-cyan: #22d3ee;
+  --sphere-accent-gradient: linear-gradient(135deg, #7c5cff 0%, #22d3ee 100%);
+  --sphere-accent-gradient-hover: linear-gradient(135deg, #8f72ff 0%, #38e1fa 100%);
+
+  /* Real Glass Orb Behind Skills */
+  --sphere-orb-bg: radial-gradient(
+    circle at 30% 28%,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(124, 92, 255, 0.12) 28%,
+    rgba(34, 211, 238, 0.05) 58%,
+    rgba(10, 12, 24, 0.6) 90%
+  );
+  --sphere-orb-highlight: radial-gradient(
+    circle at 26% 24%,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.15) 26%,
+    transparent 55%
+  );
+  --sphere-orb-rim: rgba(255, 255, 255, 0.2);
+  --sphere-orb-inner-glow: 
+    inset 0 0 50px rgba(124, 92, 255, 0.25),
+    inset 0 0 18px rgba(34, 211, 238, 0.18),
+    inset 2px 3px 8px rgba(255, 255, 255, 0.28);
+  --sphere-orb-outer-glow: 
+    0 0 60px -8px rgba(124, 92, 255, 0.35),
+    0 0 100px -15px rgba(34, 211, 238, 0.2);
+
+  /* Central Pulsing Glowing Core */
+  --sphere-core-glow: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(34, 211, 238, 0.8) 35%,
+    rgba(124, 92, 255, 0.45) 65%,
+    transparent 100%
+  );
+  --sphere-core-shadow: 
+    0 0 24px 6px rgba(124, 92, 255, 0.55),
+    0 0 45px 12px rgba(34, 211, 238, 0.35);
+
+  /* Wireframe Lines & Orbit Rings */
+  --sphere-wireframe-stroke: rgba(165, 180, 252, 0.13);
+  --sphere-wireframe-sub-stroke: rgba(255, 255, 255, 0.07);
+  --sphere-orbit-stroke: rgba(34, 211, 238, 0.28);
+  --sphere-orbit-glow: rgba(34, 211, 238, 0.4);
+
+  /* Skill Chip Pills */
+  --sphere-chip-bg: rgba(15, 18, 35, 0.68);
+  --sphere-chip-border: rgba(255, 255, 255, 0.14);
+  --sphere-chip-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+  /* Depth Level Cues */
+  --sphere-chip-text-front: #ffffff;
+  --sphere-chip-border-front: rgba(255, 255, 255, 0.28);
+
+  --sphere-chip-text-mid: #d6daf0;
+  --sphere-chip-border-mid: rgba(255, 255, 255, 0.14);
+
+  --sphere-chip-text-back: #8e95b3;
+  --sphere-chip-border-back: rgba(255, 255, 255, 0.07);
+
+  /* Dot Indicator */
+  --sphere-dot-color: #22d3ee;
+  --sphere-dot-glow: 0 0 6px #22d3ee, 0 0 12px rgba(34, 211, 238, 0.6);
+
+  /* Hover & Focus States */
+  --sphere-chip-hover-text: #ffffff;
+  --sphere-chip-hover-border: rgba(255, 255, 255, 0.5);
+  --sphere-chip-hover-shadow: 
+    0 0 24px -2px rgba(124, 92, 255, 0.65),
+    0 0 42px -4px rgba(34, 211, 238, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   Light-Mode Fallback (prefers-color-scheme: light)
+   -------------------------------------------------------------------------- */
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --sphere-surface: #f8fafc;
+    --sphere-orb-bg: radial-gradient(
+      circle at 30% 28%,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(124, 92, 255, 0.12) 32%,
+      rgba(34, 211, 238, 0.08) 60%,
+      rgba(238, 242, 255, 0.7) 95%
+    );
+    --sphere-orb-highlight: radial-gradient(
+      circle at 26% 24%,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.35) 30%,
+      transparent 60%
+    );
+    --sphere-orb-rim: rgba(124, 92, 255, 0.22);
+    --sphere-orb-inner-glow: 
+      inset 0 0 40px rgba(124, 92, 255, 0.16),
+      inset 0 0 16px rgba(34, 211, 238, 0.15),
+      inset 2px 3px 6px rgba(255, 255, 255, 0.9);
+    --sphere-orb-outer-glow: 
+      0 0 50px -10px rgba(124, 92, 255, 0.22),
+      0 0 85px -16px rgba(34, 211, 238, 0.18);
+
+    --sphere-core-glow: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(34, 211, 238, 0.85) 35%,
+      rgba(124, 92, 255, 0.5) 65%,
+      transparent 100%
+    );
+    --sphere-core-shadow: 
+      0 0 20px 5px rgba(124, 92, 255, 0.35),
+      0 0 38px 10px rgba(34, 211, 238, 0.25);
+
+    --sphere-wireframe-stroke: rgba(124, 92, 255, 0.18);
+    --sphere-wireframe-sub-stroke: rgba(15, 23, 42, 0.07);
+    --sphere-orbit-stroke: rgba(14, 165, 233, 0.32);
+    --sphere-orbit-glow: rgba(34, 211, 238, 0.25);
+
+    --sphere-chip-bg: rgba(255, 255, 255, 0.84);
+    --sphere-chip-border: rgba(124, 92, 255, 0.18);
+    --sphere-chip-shadow: 0 4px 18px -3px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    --sphere-chip-text-front: #0f172a;
+    --sphere-chip-border-front: rgba(124, 92, 255, 0.32);
+
+    --sphere-chip-text-mid: #334155;
+    --sphere-chip-border-mid: rgba(124, 92, 255, 0.18);
+
+    --sphere-chip-text-back: #64748b;
+    --sphere-chip-border-back: rgba(15, 23, 42, 0.08);
+
+    --sphere-dot-color: #0284c7;
+    --sphere-dot-glow: 0 0 6px #0284c7, 0 0 12px rgba(2, 132, 199, 0.4);
+
+    --sphere-chip-hover-text: #ffffff;
+    --sphere-chip-hover-border: rgba(255, 255, 255, 0.7);
+    --sphere-chip-hover-shadow: 
+      0 6px 24px -2px rgba(124, 92, 255, 0.45),
+      0 0 35px -4px rgba(34, 211, 238, 0.38);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Main Container & Wrapper (Responsive: 280px to 440px)
+   -------------------------------------------------------------------------- */
+.skills-sphere-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.skills-sphere-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  min-width: 280px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  user-select: none;
+  touch-action: none;
+  perspective: 1000px;
+  overflow: visible;
+  background: transparent !important;
+}
+
+@media (max-width: 640px) {
+  .skills-sphere-container {
+    max-width: 320px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .skills-sphere-container {
+    max-width: 440px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Sphere Orb: Completely transparent as requested
+   -------------------------------------------------------------------------- */
+.skills-sphere-orb {
+  display: none !important;
+}
+
+/* Radial specular highlight in top-left */
+.skills-sphere-orb-highlight {
+  position: absolute;
+  top: -12%;
+  left: -12%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: var(--sphere-orb-highlight);
+  pointer-events: none;
+}
+
+/* Subtle secondary bottom-right glow */
+.skills-sphere-orb-inner-glow {
+  position: absolute;
+  bottom: -20%;
+  right: -20%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(34, 211, 238, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(10px);
+}
+
+/* --------------------------------------------------------------------------
+   Visual Requirement 6: Faint Technical Wireframe with Slow Rotation & Orbit Rings
+   -------------------------------------------------------------------------- */
+.skills-sphere-wireframe-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 300ms ease;
+}
+
+.skills-sphere-wireframe {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Base wireframe geometries */
+.wire-boundary {
+  stroke: var(--sphere-wireframe-stroke);
+  stroke-width: 1;
+  fill: none;
+}
+
+.wire-lat {
+  stroke: var(--sphere-wireframe-stroke);
+  stroke-width: 0.85;
+  stroke-dasharray: 4 4;
+  fill: none;
+}
+
+.wire-lat-sub {
+  stroke: var(--sphere-wireframe-sub-stroke);
+  stroke-width: 0.65;
+  stroke-dasharray: 3 4;
+  fill: none;
+}
+
+.wire-long {
+  stroke: var(--sphere-wireframe-sub-stroke);
+  stroke-width: 0.85;
+  stroke-dasharray: 4 4;
+  fill: none;
+}
+
+.wire-axis {
+  stroke: var(--sphere-wireframe-sub-stroke);
+  stroke-width: 0.75;
+  stroke-dasharray: 2 4;
+}
+
+/* Slow rotation animation for latitude/longitude lines */
+.skills-sphere-wireframe-grid {
+  transform-origin: 200px 200px;
+  animation: sphereWireSpin 55s linear infinite;
+}
+
+@keyframes sphereWireSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Orbit rings */
+.wire-orbit-ring {
+  stroke: var(--sphere-orbit-stroke);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+  fill: none;
+}
+
+.wire-orbit-ring-alt {
+  stroke-width: 0.85;
+  stroke-dasharray: 4 5;
+  opacity: 0.8;
+}
+
+.wire-orbit-node {
+  fill: var(--sphere-accent-cyan);
+  filter: drop-shadow(0 0 5px var(--sphere-accent-cyan));
+}
+
+.skills-sphere-orbit-1 {
+  transform-origin: 200px 200px;
+  animation: sphereOrbitSpin1 32s linear infinite;
+}
+
+.skills-sphere-orbit-2 {
+  transform-origin: 200px 200px;
+  animation: sphereOrbitSpin2 42s linear infinite reverse;
+}
+
+@keyframes sphereOrbitSpin1 {
+  from {
+    transform: rotate(-24deg);
+  }
+  to {
+    transform: rotate(336deg);
+  }
+}
+
+@keyframes sphereOrbitSpin2 {
+  from {
+    transform: rotate(36deg);
+  }
+  to {
+    transform: rotate(-324deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Visual Requirement 5: Soft Pulsing Glowing Core
+   -------------------------------------------------------------------------- */
+.skills-sphere-core-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 300ms ease;
+}
+
+.skills-sphere-core {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--sphere-core-glow);
+  box-shadow: var(--sphere-core-shadow);
+  filter: blur(1px);
+}
+
+.skills-sphere-core-pulse {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(124, 92, 255, 0.45) 0%,
+    rgba(34, 211, 238, 0.25) 50%,
+    transparent 75%
+  );
+  animation: sphereCorePulse 3.6s ease-in-out infinite;
+}
+
+@keyframes sphereCorePulse {
+  0%, 100% {
+    transform: scale(0.88);
+    opacity: 0.6;
+    box-shadow: 
+      0 0 18px 4px rgba(124, 92, 255, 0.45),
+      0 0 32px 8px rgba(34, 211, 238, 0.25);
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.95;
+    box-shadow: 
+      0 0 28px 8px rgba(124, 92, 255, 0.7),
+      0 0 50px 14px rgba(34, 211, 238, 0.45);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Skills Stage (Hosting 3D Positioned Items)
+   -------------------------------------------------------------------------- */
+.skills-sphere-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  cursor: grab;
+  z-index: 20;
+}
+
+.skills-sphere-stage:active {
+  cursor: grabbing;
+}
+
+/* --------------------------------------------------------------------------
+   Central Tech Core with Code Symbol </>
+   -------------------------------------------------------------------------- */
+.skills-sphere-center-emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+}
+
+.skills-sphere-center-plate {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #171c2f 0%, #080a14 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 
+    0 0 25px rgba(34, 211, 238, 0.4),
+    inset 0 0 14px rgba(34, 211, 238, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.skills-sphere-center-brackets {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.95),
+    0 0 22px rgba(34, 211, 238, 0.85);
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+
+.skills-sphere-center-aura {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.32) 0%, rgba(124, 92, 255, 0.18) 50%, transparent 75%);
+  filter: blur(8px);
+  animation: sphereCorePulse 3.5s ease-in-out infinite;
+  z-index: 1;
+}
+
+.skills-sphere-center-ring {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 1px dashed rgba(34, 211, 238, 0.45);
+  animation: spinClockwise 24s linear infinite;
+  z-index: 1;
+}
+
+@keyframes spinClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Hologram Pedestal Base Rings
+   -------------------------------------------------------------------------- */
+.skills-sphere-pedestal {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 70px;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pedestal-ring-outer {
+  position: absolute;
+  width: 340px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.2), inset 0 0 15px rgba(34, 211, 238, 0.12);
+  transform: rotateX(75deg);
+}
+
+.pedestal-ring-inner {
+  position: absolute;
+  width: 220px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45), inset 0 0 10px rgba(56, 189, 248, 0.25);
+  transform: rotateX(75deg);
+}
+
+.pedestal-flare {
+  position: absolute;
+  bottom: 24px;
+  width: 80px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22d3ee;
+  filter: blur(6px);
+  box-shadow: 0 0 20px #22d3ee, 0 0 40px rgba(34, 211, 238, 0.7);
+  opacity: 0.8;
+}
+
+/* --------------------------------------------------------------------------
+   Circular Glass Skill Discs (Authentic Brand Badges)
+   TECHNICAL RULE: Never put transitions on transform or opacity (set via RAF)!
+   -------------------------------------------------------------------------- */
+.skills-sphere-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  opacity: 0; /* Hidden by default until positioned by RAF */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 30%, rgba(26, 32, 54, 0.92) 0%, rgba(10, 13, 24, 0.96) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 8px 24px -2px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    0 0 16px -2px rgba(34, 211, 238, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  will-change: transform, opacity;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  padding: 0;
+  transition: 
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    filter 220ms ease;
+}
+
+@media (max-width: 640px) {
+  .skills-sphere-item {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.skills-sphere-disc-surface {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  pointer-events: none;
+}
+
+/* Depth Level Cues */
+.skills-sphere-item[data-depth="front"] {
+  border-color: rgba(255, 255, 255, 0.35);
+  filter: blur(0px);
+}
+
+.skills-sphere-item[data-depth="mid"] {
+  border-color: rgba(255, 255, 255, 0.18);
+  filter: blur(0px);
+}
+
+.skills-sphere-item[data-depth="back"] {
+  border-color: rgba(255, 255, 255, 0.08);
+  filter: blur(1.2px);
+}
+
+/* Hover & Focus States */
+.skills-sphere-item:hover,
+.skills-sphere-item:focus-visible {
+  border-color: rgba(34, 211, 238, 0.95) !important;
+  box-shadow: 
+    0 0 32px rgba(34, 211, 238, 0.7),
+    inset 0 0 14px rgba(34, 211, 238, 0.4),
+    0 10px 28px rgba(0, 0, 0, 0.9) !important;
+  filter: blur(0px) !important;
+  background: radial-gradient(circle at 35% 30%, rgba(36, 46, 78, 0.96) 0%, rgba(12, 17, 34, 0.98) 100%) !important;
+}
+
+.skills-sphere-item:focus-visible {
+  outline: 2px solid var(--sphere-accent-cyan);
+  outline-offset: 3px;
+}
+
+/* Floating Tooltip */
+.skills-sphere-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(10, 12, 22, 0.94);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 12px rgba(34, 211, 238, 0.25);
+  border-radius: 8px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 500;
+}
+
+.skills-sphere-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgba(34, 211, 238, 0.4) transparent transparent transparent;
+}
+
+.skills-sphere-item:hover .skills-sphere-tooltip,
+.skills-sphere-item:focus-visible .skills-sphere-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.skills-sphere-tooltip-title {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.skills-sphere-tooltip-cat {
+  font-family: 'Inter', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  color: #22d3ee;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orbit-node-glow {
+  filter: drop-shadow(0 0 5px #22d3ee);
+  animation: orbitPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes orbitPulse {
+  0%, 100% {
+    opacity: 0.7;
+    r: 2.5;
+  }
+  50% {
+    opacity: 1;
+    r: 3.5;
+  }
+}
+
+/* Dim rest of the sphere when an item is active/hovered */
+.skills-sphere-container[data-has-active="true"] .skills-sphere-orb {
+  opacity: 0.52;
+}
+
+.skills-sphere-container[data-has-active="true"] .skills-sphere-wireframe-wrap {
+  opacity: 0.35;
+}
+
+.skills-sphere-container[data-has-active="true"] .skills-sphere-center-emblem {
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion Support
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .skills-sphere-wireframe-grid,
+  .skills-sphere-orbit-1,
+  .skills-sphere-orbit-2,
+  .skills-sphere-core-pulse {
+    animation: none !important;
+  }
+
+  .skills-sphere-item {
+    transition: none !important;
+  }
+
+  .skills-sphere-stage {
+    cursor: default;
+  }
+}
